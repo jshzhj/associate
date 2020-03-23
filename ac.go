@@ -1,4 +1,4 @@
-package core
+package associate
 
 //Ac自动机根结点
 type AcAutoMachine struct {
