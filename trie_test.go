@@ -24,13 +24,6 @@ func TestTrie(t *testing.T) {
 	mgc := obj.Search("相")
 	fmt.Println(mgc)
 
-	//Ac自动机-todo
-	//ac := core.NewAcAutoMachine()
-	//ac.AddPattern("垃圾")
-	//ac.AddPattern("文章")
-	//ac.AddPattern("真")
-	//ac.Build()
-
 	//(3)敏感词替换
 	trie := NewTrie()
 	//将敏感词加入到Trie中,

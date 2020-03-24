@@ -1,33 +1,51 @@
-# associate
+# Associate
 
-#### 描述
-Go语言实现搜索引擎自动联想功能以及字符串搜索(敏感词过滤)
+智能提示,敏感词替换
 
-#### 安装
+#### 用法
 
-1.  git clone https://gitee.com/zhj-open-source/associate.git
-2.  进入main目录,执行go build
-3.  执行 ./associate
-4.  浏览器访问http://localhost:8080/index
+```go
 
-#### 说明
+package main
 
-1.  Golang1.14版本(最新版本)实现,代码中注释非常详细,如有问题,欢迎指正
-![image text](https://gitee.com/zhj-open-source/associate/raw/dev/WechatIMG121.png)
-![image text](https://gitee.com/zhj-open-source/associate/raw/dev/WechatIMG13.png)
-#### Contribution
+import (
+	"fmt"
+	"github.com/jshzhj/associate"
+)
 
-1.  Fork the repository
-2.  Create Feat_xxx branch
-3.  Commit your code
-4.  Create Pull Request
+func main(){
+	obj := associate.NewTrie()
+	//(1)前缀搜索,智能提示
+	//第一个参数为要加入Trie中的字符串,第二个参数为字符串叶子节点保存的数据
+	obj.Add("相框", "相框")
+	obj.Add("相框摆", "相框摆")
+	obj.Add("相框摆台", "相框摆台")
+	obj.Add("相框挂", "相框挂")
+	obj.Add("相框挂台", "相框挂台")
+
+	data := obj.PrefixSearch("相框", 4)
+	for _, v := range data {
+		fmt.Println(v)
+	//输出:相框 相框挂 相框摆 相框摆台
+	}
+
+	//(2)查看当前字符串是否在trie树中
+	mgc := obj.Search("相")
+	fmt.Println(mgc)
+        //输出:false
+
+	//(3)敏感词替换
+	trie := associate.NewTrie()
+	//将敏感词加入到Trie中,
+	trie.Add("tm", "tm")
+	trie.Add("电影","电影")
+	trie.Add("他妈", nil)
+
+	result, str := trie.Replace("这个电影真tm的是难看,好他妈难看啊", "*")
+	fmt.Printf("result:%#v, str:%v\n", result, str)
+    //输出:result:"这个**真**的是难看,好*难看啊", str:true
+
+}
 
 
-#### Gitee Feature
-
-1.  You can use Readme\_XXX.md to support different languages, such as Readme\_en.md, Readme\_zh.md
-2.  Gitee blog [blog.gitee.com](https://blog.gitee.com)
-3.  Explore open source project [https://gitee.com/explore](https://gitee.com/explore)
-4.  The most valuable open source project [GVP](https://gitee.com/gvp)
-5.  The manual of Gitee [https://gitee.com/help](https://gitee.com/help)
-6.  The most popular members  [https://gitee.com/gitee-stars/](https://gitee.com/gitee-stars/)
+```
